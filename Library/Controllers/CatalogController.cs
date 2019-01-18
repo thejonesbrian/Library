@@ -81,11 +81,17 @@ namespace Library.Controllers
                 AssetId = id,
                 ImageUrl = asset.ImageUrl,
                 Title = asset.Title,
-                LibraryCard = "",
+                LibraryCardId = "",
                 IsCheckedOut = _checkouts.IsCheckedOut(id)
             };
             return View(model);
 
+        }
+
+        public IActionResult CheckIn(int id)
+        {
+            _checkouts.CheckInItem(id);
+            return RedirectToAction("Detail", new { id = id });
         }
 
         public IActionResult Hold(int id)
@@ -96,7 +102,7 @@ namespace Library.Controllers
                 AssetId = id,
                 ImageUrl = asset.ImageUrl,
                 Title = asset.Title,
-                LibraryCard = "",
+                LibraryCardId = "",
                 IsCheckedOut = _checkouts.IsCheckedOut(id),
                 HoldCount = _checkouts.GetCurrentHolds(id).Count()
             };
@@ -117,7 +123,7 @@ namespace Library.Controllers
         [HttpPost]
         public IActionResult PlaceCheckout(int assetId, int libraryCardId)
         {
-            _checkouts.CheckInItem(assetId, libraryCardId);
+            _checkouts.CheckOutItem(assetId, libraryCardId);
             return RedirectToAction("Detail", new { id = assetId});
         }
 
