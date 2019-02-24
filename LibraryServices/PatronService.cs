@@ -39,10 +39,7 @@ namespace LibraryServices
 
         public IEnumerable<CheckoutHistory> GetCheckoutHistory(int patronId)
         {
-            var cardId = _context.Patrons
-                .Include(c => c.LibraryCard)
-                .FirstOrDefault(c => c.Id == patronId)
-                .LibraryCard.Id;
+            var cardId = Get(patronId).LibraryCard.Id;
 
             return _context.CheckoutHistories
                 .Include(ch => ch.LibraryCard)
@@ -53,10 +50,7 @@ namespace LibraryServices
 
         public IEnumerable<Checkouts> GetCheckouts(int patronId)
         {
-            var cardId = _context.Patrons
-                .Include(c => c.LibraryCard)
-                .FirstOrDefault(c => c.Id == patronId)
-                .LibraryCard.Id;
+            var cardId = Get(patronId).LibraryCard.Id;
 
             return _context.Checkouts
                 .Include(ch => ch.LibraryCard)
@@ -64,9 +58,16 @@ namespace LibraryServices
                 .Where(co => co.LibraryCard.Id == cardId);
         }
 
-        public IEnumerable<Checkouts> GetHolds(int patronId)
+        public IEnumerable<Holds> GetHolds(int patronId)
         {
-            throw new NotImplementedException();
+            var cardId = Get(patronId).LibraryCard.Id;
+
+            return _context.Holds
+                .Include(h => h.LibraryCard)
+                .Include(h => h.LibraryAsset)
+                .Where(h => h.LibraryCard.Id == cardId)
+                .OrderByDescending(h => h.HoldPlaced);
         }
+
     }
 }

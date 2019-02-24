@@ -12,7 +12,7 @@ namespace LibraryData
         void Add(Patron newPatron);
 
         IEnumerable<CheckoutHistory> GetCheckoutHistory(int patronId);
-        IEnumerable<Checkouts> GetHolds(int patronId);
+        IEnumerable<Holds> GetHolds(int patronId);
         IEnumerable<Checkouts> GetCheckouts(int patronId);
     }
 }
